@@ -1,0 +1,15 @@
+{
+  "extends": ["react-app", "react-app/jest"],
+  "rules": {
+    "import/no-anonymous-default-export": 0,
+    "no-console": 1,
+    "react/jsx-props-no-spreading": [
+      "error",
+      {
+        "html": "ignore",
+        "custom": "ignore",
+        "exceptions": [""]
+      }
+    ]
+  }
+}

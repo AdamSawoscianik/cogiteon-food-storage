@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-property-sort-order-smacss"
+  ],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "block-no-empty": null,
+    "declaration-block-no-shorthand-property-overrides": true,
+    "declaration-empty-line-before": "never",
+    "font-family-name-quotes": "always-where-recommended",
+    "function-url-no-scheme-relative": true,
+    "function-url-quotes": "always",
+    "no-descending-specificity": null,
+    "string-quotes": "single",
+    "value-keyword-case": null,
+    "scss/dollar-variable-pattern": "^[a-z][a-zA-Z0-9]+$"
+  }
+}

@@ -1,21 +1,79 @@
 {
-  "name": "pp",
+  "name": "foodstorage",
   "version": "0.1.0",
   "private": true,
+  "description": "food storage",
+  "author": {
+    "name": "Adam Sawościanik",
+    "email": "a.sawoscianik@gmail.com"
+  },
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "auto-launch": "^5.0.5",
+    "cors": "^2.8.5",
+    "electron-is-dev": "^2.0.0",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
+    "serialport": "^10.4.0",
+    "socket.io": "^4.5.0",
+    "socket.io-client": "^4.5.0",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "concurrently": "^7.2.0",
+    "electron": "^18.2.3",
+    "electron-builder": "^23.0.3",
+    "wait-on": "^6.0.1"
+  },
+  "build": {
+    "appId": "FoodStorage",
+    "productName": "FoodStorage",
+    "copyright": "Copyright © 2023 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": {
+        "target": "appImage",
+        "arch": [
+          "x64"
+        ]
+      }
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "extraResources": [
+      "tokens.db"
+    ]
+  },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"SET BROWSER=none&&yarn dev\" \"wait-on http://127.0.0.1:3000 && electron .\"",
+    "preelectron-pack-linux": "yarn build",
+    "preelectron-pack-win": "yarn build",
+    "electron-pack-linux": "electron-builder --dir --x64 --linux deb",
+    "electron-pack-win": "electron-builder --dir --win",
+    "server": "nodemon public/app.js"
   },
   "eslintConfig": {
     "extends": [
