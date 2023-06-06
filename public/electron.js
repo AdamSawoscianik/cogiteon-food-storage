@@ -1,12 +1,12 @@
-const path = require("path");
-const { app, BrowserWindow, screen } = require("electron");
-const isDev = require("electron-is-dev");
-const server = require("./app.js");
+const path = require('path');
+const { app, BrowserWindow, screen } = require('electron');
+const isDev = require('electron-is-dev');
+const server = require('./app.js');
 
 if (!isDev) {
-  var AutoLaunch = require("auto-launch");
+  var AutoLaunch = require('auto-launch');
   var autoLauncher = new AutoLaunch({
-    name: "food-storage",
+    name: 'food-storage',
   });
 
   autoLauncher
@@ -63,10 +63,10 @@ const createWindow = (path, withExternal) => {
   if (isDev) {
     let devtools = new BrowserWindow();
     win.webContents.setDevToolsWebContents(devtools.webContents);
-    win.webContents.openDevTools({ mode: "detach" });
+    win.webContents.openDevTools({ mode: 'detach' });
   }
 
-  win.webContents.on("did-finish-load", () => {
+  win.webContents.on('did-finish-load', () => {
     win.show();
     win.focus();
   });
@@ -75,20 +75,20 @@ const createWindow = (path, withExternal) => {
 const createWindows = () => {
   createWindow(
     isDev
-      ? "http://127.0.0.1:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`,
-    false
+      ? 'http://127.0.0.1:3000'
+      : `file://${path.join(__dirname, '../build/index.html')}`,
+    true
   );
   createWindow(
-    `file://${path.join(__dirname, "../build/video-preview/index.html")}`,
-    true
+    `file://${path.join(__dirname, '../build/video-preview/index.html')}`,
+    false
   );
 };
 
-app.on("ready", createWindows);
+app.on('ready', createWindows);
 
-app.on("window-all-closed", function () {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
