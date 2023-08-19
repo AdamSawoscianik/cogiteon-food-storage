@@ -29,6 +29,10 @@ const App = () => {
 
       socket.on('data', onButtonClicked);
 
+      socket.on('error', () =>
+        alert('Wystąpił błąd w komunikacji, zgłoś się do obsługi eksponatu.')
+      );
+
       return () => {
         socket.off('data', onButtonClicked);
       };

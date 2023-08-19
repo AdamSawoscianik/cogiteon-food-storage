@@ -11,7 +11,7 @@ const io = new Server(server, {
 });
 
 const serialPort = new SerialPort({
-  path: 'COM1', // /dev/ttyS0 for linux COM1 fro windows
+  path: '/dev/ttyS0', // /dev/ttyS0 for linux COM1 fro windows
   baudRate: 115200,
 }).setEncoding('utf8');
 
@@ -34,9 +34,19 @@ io.on('connection', (socket) => {
     return console.log('Error getting data: ', err.message);
   });
 
+  let errorCount = 0;
+
   serialPort.on('data', (data) => {
-    socket.emit('data', data);
-    console.log(`data received: ${data}`);
+    if (data.includes('NOK')) {
+      errorCount++;
+      if (errorCount > 3) {
+        socket.emit('error');
+        errorCount = 0;
+      }
+    } else {
+      socket.emit('data', data);
+      console.log(`data received: ${data}`);
+    }
   });
 });
 
