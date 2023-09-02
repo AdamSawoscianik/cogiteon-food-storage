@@ -34,19 +34,9 @@ io.on('connection', (socket) => {
     return console.log('Error getting data: ', err.message);
   });
 
-  let errorCount = 0;
-
   serialPort.on('data', (data) => {
-    if (data.includes('NOK')) {
-      errorCount++;
-      if (errorCount > 3) {
-        socket.emit('error');
-        errorCount = 0;
-      }
-    } else {
-      socket.emit('data', data);
-      console.log(`data received: ${data}`);
-    }
+    socket.emit('data', data);
+    console.log(`data received: ${data}`);
   });
 });
 

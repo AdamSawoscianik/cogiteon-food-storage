@@ -29,10 +29,6 @@ const App = () => {
 
       socket.on('data', onButtonClicked);
 
-      socket.on('error', () =>
-        alert('Wystąpił błąd w komunikacji, zgłoś się do obsługi eksponatu.')
-      );
-
       return () => {
         socket.off('data', onButtonClicked);
       };
@@ -40,7 +36,7 @@ const App = () => {
   }, [socket, videoRef, video]);
 
   return socket ? (
-    <div className="video">
+    <div>
       {/* <div className="buttons">
         <button onClick={() => socket.emit('test', '1')}>1</button>
         <button onClick={() => socket.emit('test', '2')}>2</button>
@@ -48,6 +44,9 @@ const App = () => {
         <button onClick={() => socket.emit('test', '4')}>4</button>
         <button onClick={() => socket.emit('test', '5')}>5</button>
       </div> */}
+      {!video && (
+        <img src="assets/background-small.png" alt="background image" />
+      )}
       <video
         ref={videoRef}
         src={`assets/bottom/${video}.m4v`}
