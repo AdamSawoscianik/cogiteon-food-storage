@@ -1,9 +1,12 @@
-const { SerialPort } = require('serialport');
-const http = require('http');
-const server = http.createServer();
-const { Server } = require('socket.io');
+import fs from 'fs';
+import path from 'path';
+import { SerialPort } from 'serialport';
+import http from 'http';
+import { Server } from 'socket.io';
 
-const io = new Server(server, {
+const server = http.createServer();
+
+const socket = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
@@ -15,31 +18,49 @@ const serialPort = new SerialPort({
   baudRate: 115200,
 }).setEncoding('utf8');
 
-const connectSerialPort = () => {
-  serialPort.on('open', (err) => {
+const log = (message) => {
+  const logFilePath = path.join(__dirname, 'app-logs.log');
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+
+  fs.appendFile(logFilePath, logMessage, (err) => {
     if (err) {
-      return console.log('Error opening Serial Port: ', err.message);
+      console.error('Failed to write error to file:', err);
     }
-    return console.log('Serial Port opened correctly');
   });
 };
 
-io.on('connection', (socket) => {
-  console.log(`socket connected ${socket.id}`);
-  connectSerialPort();
+const connectToSerialPort = () => {
+  serialPort.on('open', (err) => {
+    if (err) {
+      log(`Error - could not connect to serialport, message: ${err.message}`);
+    }
+    log('Success - connected to serialport');
+  });
+};
+
+socket.on('connection', (socket) => {
+  log(`Success - socket connected ${socket.id}`);
+  connectToSerialPort();
 
   // socket.on('test', (data) => socket.emit('data', data));
 
   serialPort.on('error', (err) => {
-    return console.log('Error getting data: ', err.message);
+    log(`Error - error from serialPort: ${err}`);
   });
 
   serialPort.on('data', (data) => {
+    log(`Success - data from serialPort: ${data}`);
     socket.emit('data', data);
-    console.log(`data received: ${data}`);
   });
 });
 
-server.listen(5000, () => {
-  console.log('listening on *:5000');
-});
+server
+  .listen(5000, () => {
+    console.log('listening on *:5000');
+    log('Success - Server started successfully on port 5000');
+  })
+  .on('error', (err) => {
+    console.error('Failed to start server:', err);
+    log(`Error - Failed to start server: ${err.message}`);
+  });
